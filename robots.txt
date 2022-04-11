@@ -1,0 +1,5 @@
+User-Agent: *
+Disallow: /main.css
+Disallow: /list.html
+Disallow: /test.html
+Host: vstebunov.me

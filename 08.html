@@ -1,0 +1,147 @@
+﻿<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="utf-8"></meta>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Блог Стебунова Владимира</title>
+		<link rel="stylesheet" type="text/css" href="main.css">	
+        <meta property="og:title" content="Fragment shader" />
+		
+	</head>
+	<body>
+		<header>
+            <h1><a href="/">Блог Стебунова Владимира</a></h1>
+		</header>
+		<main>
+			<article>
+				<time datetime=22-08-2017>22 августа 2017</time>
+				<h1>Fragment shader</h1>
+
+<p>В этой заметке я постараюсь рассказать как в Processing работать с трехмерными объектами и шейдерами. Для начала инициализируем и рисуем сцену:</p>
+
+<pre><code>float angle;
+PShape car;
+void setup() {
+    size(400, 400, P3D);
+    noStroke();
+}
+</code></pre>
+
+<p>Скачиваем модель <a href="https://www.turbosquid.com/3d-models/3d-dodge-challenger-rt-shaker/1091890">машины</a>. Нам необходимы obj и mtl файлы для отображения машины. В файле mtl есть ссылка на текстуру. Именно этот файл содержал абсолютную ссылку на текстуру, так что пришлось поправить его на относительную. Ставим на сцену машину. </p>
+
+<pre><code>    car = loadShape(&quot;car.obj&quot;);
+</code></pre>
+
+<p>К сожалению главная точка модели стоит не там где нам надо, так что подготавливаем модель. Разворачиваем как надо. Ставим камеру под нужным углом.</p>
+
+<pre><code>  car.rotateZ(PI);
+  car.translate(200,-200,300);
+</code></pre>
+
+<p>Добавляем свет. Затемним сцену.</p>
+
+<pre><code>  ambientLight(51, 102, 126);
+  pointLight(255, 255, 255, width / 2, height / 2, 100);    
+</code></pre>
+
+<p>Сделаем чтобы нарисованная 3D сцена выводилась на поверхность. Эта поверхность и будет обрабатываться шейдером, так как мы хотим постпроцессинг делать всей сцены, а не только текстуры. Шейдеры обрабатывают лишь текстуры.</p>
+
+<p>Выводим результирующую фигуру и даём ей текстуру с результатом.</p>
+
+<pre><code class="language-Processing">beginShape();
+texture(img);
+vertex(-100, -100, 0);
+vertex( 100, -100, 0);
+vertex( 100,  100, 0);
+vertex(-100,  100, 0);
+endShape(CLOSE);
+</code></pre>
+
+<p>Теперь инициализируем шейдер.</p>
+
+<pre><code class="language-Processing">Shader toon;
+
+void setup() {
+    ...
+  toon = loadShader(&quot;ToonVert.glsl&quot;);
+}
+</code></pre>
+
+<p>Сам шейдер работает только с одним текселем на поверхности. Благодаря этому достигается распаралелливание обработки изображений. Для того чтобы получить правильно работающий алгоритм мы должны расписать как вычислить каждую конкретную точку. Это не всегда просто. Точка ответа тоже является переменной в которую можно только записать получившийся тексель, называется она gl_FragColor.</p>
+
+<p>Будем использовать алгоритм порядкового дитеринга и перевод всё в цвета ZX Spectrum. В openGL цвета представлены числами с плавающей точкой от нуля до единицы.</p>
+
+<p>Для получения текселя используется функция texture2D. Переменная varying говорит о том что данные к нам приходят из вершинного шейдера. vertTexCoord передаёт позицию данного текселя.</p>
+
+<pre><code class="language-GLSL">uniform sampler2D texture;
+
+varying vec4 vertTexCoord;
+
+const int indexMatrix8x8[64] = int[](0,  32, 8,  40, 2,  34, 10, 42,
+                                     48, 16, 56, 24, 50, 18, 58, 26,
+                                     12, 44, 4,  36, 14, 46, 6,  38,
+                                     60, 28, 52, 20, 62, 30, 54, 22,
+                                     3,  35, 11, 43, 1,  33, 9,  41,
+                                     51, 19, 59, 27, 49, 17, 57, 25,
+                                     15, 47, 7,  39, 13, 45, 5,  37,
+                                     63, 31, 55, 23, 61, 29, 53, 21);
+
+float indexValue() {
+    int x = int(mod(gl_FragCoord.x, 8));
+    int y = int(mod(gl_FragCoord.y, 8));
+    return indexMatrix8x8[(x + y * 8)] / 64.0;
+}
+
+vec3 dither(vec4 color) {
+    float d = indexValue();
+    float r = color.r + d;
+    float g = color.g + d;
+    float b = color.b + d;
+
+    float m = max(r,g);
+    m = max (m,b);
+
+    if (m &lt; 0.49) {
+        r = 0.0;
+        g = 0.0;
+        b = 0.0;
+    } else {
+        r = r &gt;= 0.49 ? 0.49 : 0.0;
+        g = g &gt;= 0.49 ? 0.49 : 0.0;
+        b = b &gt;= 0.49 ? 0.49 : 0.0;
+    }
+
+    return vec3(r,g,b);
+}
+
+void main() {
+  vec4 col = texture2D(texture, vertTexCoord.st);
+  gl_FragColor = vec4(dither(col),1);
+}
+</code></pre>
+
+<p>Вот результат.</p>
+
+<p><img src="img/simple_shader.png" alt="image" /></p>
+
+<h3>Ссылки:</h3>
+
+<ul>
+<li><a href="http://alex-charlton.com/posts/Dithering_on_the_GPU/">Дитеринг на GPU. Плюс вместо rgb автор использует HUE для большей достоверности</a></li>
+<li><a href="https://thebookofshaders.com/">Бесплатная недописанная книга по шейдерам</a></li>
+<li><a href="http://www.shaderific.com/glsl-functions/">Список функций GLSL c внятным объяснением</a></li>
+</ul>
+			</article>
+			<p>
+                <a href="09.html">Следующая статья</a>
+			</p>
+			<p>
+                <a href="07.html">Предыдущая статья</a>
+			</p>
+		</main>
+		<hr/>
+		<footer>
+			<p>Любая перепечатка материалов возможна только с разрешения владельца сайта</p>
+		</footer>
+	</body>
+</html>
