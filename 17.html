@@ -1,0 +1,40 @@
+﻿<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="utf-8"></meta>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Блог Стебунова Владимира</title>
+		<link rel="stylesheet" type="text/css" href="main.css">	
+        <meta property="og:title" content="NPM за забором" />
+		
+	</head>
+	<body>
+		<header>
+            <h1><a href="/">Блог Стебунова Владимира</a></h1>
+		</header>
+		<main>
+			<article>
+				<time datetime=16-05-2022>16 мая 2022</time>
+				<h1>NPM за забором</h1>
+
+<p>Часто приходится запускать npm внутри сети, которая не даёт пакетам соваться наружу. Из-за этого установка всего что нужно не происходит. Для того чтобы это исправить можно запретить запуск скриптов установки при инсталяции. Мне это помогло с пакетом <strong>keytar</strong> который идёт как необходимый довесок к другой библиотеки, но на наш продукт не влияет.</p>
+
+<p>Для запрета запуска скрипта необходимо добавить флаг <strong>--ignore-scripts</strong>.</p>
+
+<p><code>bash
+npm i --ignore-scripts
+</code></p>
+			</article>
+			<p>
+                
+			</p>
+			<p>
+                <a href="16.html">Предыдущая статья</a>
+			</p>
+		</main>
+		<hr/>
+		<footer>
+			<p>Любая перепечатка материалов возможна только с разрешения владельца сайта</p>
+		</footer>
+	</body>
+</html>
