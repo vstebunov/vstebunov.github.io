@@ -15,7 +15,7 @@
 		<main>
 			<article>
 				<time datetime=19-04-2017>19 апреля 2017</time>
-				<h1>﻿Как я пишу блог?</h1>
+				<h1>Как я пишу блог?</h1>
 
 <p>Я решил, что блог у меня будет статичными страницами, поэтому всe рендерится на сервере один раз. Так как не хочется заморачиваться с html, я пишу саму статью с помощью разметки <a href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet">markdown</a> в своём любимом редакторе vim. Для того чтобы посмотреть, как будет выглядеть разметка использую <a href="https://github.com/Thiht/markdown-viewer">addon для firefox</a>.<br/>Загружаю полученное на сервер через ftp. Затем компилирую markdown с помощью <a href="http://jgm.github.io/lunamark/lunamark.1.html">lunamark</a> и <a href="http://cosmo.luaforge.net/">cosmo</a> и заранее написанного шаблона в html странички. Команда компиляции markdown в html.</p>
 
@@ -50,6 +50,14 @@ grep -hP &#39;200&#39; /var/log/apache2/*.log
 <p>Она показывает кто, когда и на какие странички заходил на моём сайте.</p>
 
 <p>Вот, собственно, и всё.</p>
+
+<p><strong>UPD</strong></p>
+
+<p>Решил добавить <a href="/rss.xml">rss</a> ленту и <a href="index.html">содержимое</a> на свой сайт (make<em>rss.tcl &amp; make</em>idx.tcl). Для этого написал специальные скрипты. Оба выдерают уже из готового html необходимую информациию и вставляют в нужные шаблоны.</p>
+
+<p><strong>202205192341</strong></p>
+
+<p>Сделал скрипт который пробегается по всем черновикам и делает из них html. Находиться в той же папке где make_idx. ``` fish r</p>
 			</article>
 			<p>
                 <a href="05.html">Следующая статья</a>
