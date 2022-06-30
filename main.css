@@ -7,7 +7,7 @@ body {
 	margin:40px auto;
 	max-width:650px;
 	padding:0 10px;
-        text-align: justify;
+    text-align: justify;
 }
 footer {
 	font-size:12px;
@@ -55,4 +55,8 @@ code {
     padding-left: 4em;
     font-size: 1.4em;
     margin: 0;
+}
+address {
+    padding: 2em;
+    text-align: center;
 }
