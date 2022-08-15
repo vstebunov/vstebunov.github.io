@@ -47,3 +47,12 @@ article p {
 article blockquote p {
     text-align: justify;
 }
+td img {
+    width: 267px;
+    height: 200px;
+    font-size: 10px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    border: 1px solid #b9bdce;
+}
+
