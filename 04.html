@@ -35,8 +35,8 @@
 <p>Решил добавить <a href="/rss.xml">rss</a> ленту и <a href="index.html">содержимое</a> на свой сайт (make_rss.tcl &amp; make_idx.tcl). Для этого написал специальные скрипты. Оба выдерают уже из готового html необходимую информациию и вставляют в нужные шаблоны.</p>
 <p><strong>202205192341</strong></p>
 <p>Сделал скрипт который пробегается по всем черновикам и делает из них html. Находиться в той же папке где make_idx.</p>
-<pre><code>fish r</code></pre>
-<p><strong>202206222347 Сделать тимплейт для листа в html</strong></p>
+<p><strong>202206222347 Сделал тимплейт для листа в html</strong></p>
+<p>Теперь генерирую всё pandoc. Мелкие баги lua-markdown и небольшая заброшенность заставила перейти на него.</p>
 <pre><code>pandoc list.md -o list.html --template ~/blog/templates/template3_pandoc.html --metadata title=&quot;test&quot;</code></pre>
 			</article>
 			<p>
