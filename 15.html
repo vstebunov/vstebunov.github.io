@@ -1,4 +1,4 @@
-﻿<!DOCTYPE HTML>
+<!DOCTYPE HTML>
 <html>
 	<head>
 		<meta charset="utf-8"></meta>
@@ -15,20 +15,12 @@
 		<main>
 			<article>
 				<time datetime=20-11-2018>20 ноября 2018</time>
-				<h1>Javascript-подходы к поиску и предотвращению ошибок</h1>
-
+				<h1 id="javascript-подходы-к-поиску-и-предотвращению-ошибок">Javascript-подходы к поиску и предотвращению ошибок</h1>
 <p>В данной статье я хочу провести обзор подходов, которые могут помочь в поиске и предотвращении ошибок до попадания в готовый продукт.</p>
-
 <p>Существует идея о необходимости переводить ошибки как можно левее по этой шкале.</p>
-
-<p><code>
-Компилятор - Линтовшик - Тест - Выполнение
-</code></p>
-
-<h2>Пример кода</h2>
-
+<pre><code>Компилятор - Линтовшик - Тест - Выполнение</code></pre>
+<h2 id="пример-кода">Пример кода</h2>
 <p>Возьмем следующий код. Он содержит одну ошибку. Попробуем посмотреть, какие практики нам помогут.</p>
-
 <pre><code>let x = 100;
 
 let y = &quot;500&quot;;
@@ -37,29 +29,19 @@ function sum(x, y) {
     return x + y;
 }
 
-console.log(sum(x,y));
-</code></pre>
-
-<h2>Пассивные практики</h2>
-
+console.log(sum(x,y));</code></pre>
+<h2 id="пассивные-практики">Пассивные практики</h2>
 <p>Пассивными практиками я буду называть то, что делается один раз, при этом изменение кода не влияет на саму практику. Чем-то это похоже на пассивные навыки из Дьябло: один раз надел амулет или вставил камень в слот, и 10% от огня уже всегда с тобой.</p>
-
 <p>Под такими практиками можно подразумевать анализатор кода, линтовшик и типизацию (которая она требует дополнительной работы).</p>
-
-<h3>Линтовшик</h3>
-
+<h3 id="линтовшик">Линтовшик</h3>
 <p>Воспользовался стандартным eslint с настройками от airbnb. Никаких ошибок, кроме того, что отключена консоль, он не нашёл. Негусто. Видимо, код был написан сразу в нужной стилистике, и ждать каких-то выдающихся результатов не стоит.</p>
-
 <pre><code>&gt;eslint first.js
 
 d:\projects\catchme\first.js
   8:1  error  Unexpected console statement  no-console
 
-✖ 1 problem (1 error, 0 warnings)
-</code></pre>
-
+✖ 1 problem (1 error, 0 warnings)</code></pre>
 <p>Но всё-таки стиль предполагает, что какую-то часть ошибок получится убрать, придерживаясь стиля. Вот, например, очень распространенная ошибка, которую линтер всё-таки поймает.</p>
-
 <pre><code>let x = 100;
 let y = &quot;500&quot;;
 
@@ -68,11 +50,8 @@ function sum(x, y) {
     + y;
 }
 
-console.log(sum(x,y));
-</code></pre>
-
+console.log(sum(x,y));</code></pre>
 <p>Мы видим, что её он поймал.</p>
-
 <pre><code>d:\projects\catchme&gt;eslint first.js
 
 d:\projects\catchme\first.js
@@ -81,13 +60,9 @@ d:\projects\catchme\first.js
   9:1   error  Unexpected console statement                 no-console
 
 ✖ 3 problems (3 errors, 0 warnings)
-  2 errors, 0 warnings potentially fixable with the `--fix` option.
-</code></pre>
-
-<h3>Анализатор кода</h3>
-
+  2 errors, 0 warnings potentially fixable with the `--fix` option.</code></pre>
+<h3 id="анализатор-кода">Анализатор кода</h3>
 <p>Еще один защитник на пути ошибок — анализатор кода. Но для того, чтобы он отрабатывал, необходимо, чтобы ошибка была популярной и шаблонной, иначе он пробежится по коду и ничего не найдёт. Я не стал долго разбираться в этой теме и воспользовался JSHint в его web версии.</p>
-
 <pre><code>Metrics
 
 There is only one function in this file.
@@ -99,42 +74,21 @@ This function contains only one statement.
 Cyclomatic complexity number for this function is 1.
 Two warnings
 1    &#39;let&#39; is available in ES6 (use &#39;esversion: 6&#39;) or Mozilla JS extensions (use moz).
-2    &#39;let&#39; is available in ES6 (use &#39;esversion: 6&#39;) or Mozilla JS extensions (use moz).
-</code></pre>
-
+2    &#39;let&#39; is available in ES6 (use &#39;esversion: 6&#39;) or Mozilla JS extensions (use moz).</code></pre>
 <p>Как видим, популярных ошибок в нашем коде не обнаружено.</p>
-
-<h3>Типизирование входных и выходных параметров, наивное</h3>
-
+<h3 id="типизирование-входных-и-выходных-параметров-наивное">Типизирование входных и выходных параметров, наивное</h3>
 <p>Переименуем наш файл в .ts и попробуем скомпилировать. На выходе получается тот же файл, только let заменены на var и все пробелы убраны</p>
-
-<p><code>
-tsc first.ts --outFile res.js
-</code></p>
-
+<pre><code>tsc first.ts --outFile res.js</code></pre>
 <p>Но попробуем типизировать нашу функцию и посмотреть, к каким последствиям это приведёт. Для начала только выходной параметр сделаем числовым.</p>
-
-<p><code>
-function sum(a, b):number {
-</code></p>
-
+<pre><code>function sum(a, b):number {</code></pre>
 <p>И компилятор это съест без проблем.</p>
-
 <p>А теперь типизируем и входные параметры.</p>
-
-<p><code>
-function sum(a:number, b:number):number {
-</code></p>
-
+<pre><code>function sum(a:number, b:number):number {</code></pre>
 <p>Ура первая победа!</p>
-
 <pre><code>first.ts:8:19 - error TS2345: Argument of type &#39;string&#39; is not assignable to parameter of type &#39;number&#39;.
 
-8 console.log(sum(x,y));
-</code></pre>
-
+8 console.log(sum(x,y));</code></pre>
 <p>Теперь мы спасены от ошибок, когда параметры, заданные с самого начала, мы пытаемся пронести в нашу функцию. Это очень полезно при взаимодействии между модулями, которые меняются отдельно. За соответствие между частями программы следит компилятор. Но не все данные приходят к нам изнутри, есть еще внешние данные введённые пользователем, попробуем сэмулировать и такое поведение.</p>
-
 <pre><code>function sum(a:number, b:number):number {
     return a + b;
 }
@@ -144,46 +98,29 @@ let y:number;
 
 y = parseInt(&quot;y500&quot;);
 
-console.log(sum(x,y));
-</code></pre>
-
+console.log(sum(x,y));</code></pre>
 <p>Компилятор это без проблем съедает и на выходе мы получаем</p>
-
 <pre><code>d:\projects\catchme&gt;tsc first.ts --outFile res.js
 
 d:\projects\catchme&gt;node res.js
-NaN
-</code></pre>
-
+NaN</code></pre>
 <p>С NaN, конечно, смешно получается, потому что по логике это тот самый number.</p>
-
-<h2>Активные практики</h2>
-
+<h2 id="активные-практики">Активные практики</h2>
 <p>Перейдем к активным практикам. Под ними я подразумеваю уже включение головы, рук и написание дополнительного кода. Самое дешёвое средство — это явное прописывание в требованиях входных и выходных параметров, но это не всегда возможно, так что теперь на плечи программиста ложится валидация работы программы.</p>
-
 <p>Способами типа посмотреть на код или посмотреть на подозрительные места и запустить код с отладчиком и просто посмотреть, как всё работает, вы можете воспользоваться сами, так что перейдем к тем, где требуется дополнительный код сразу.</p>
-
-<h3>Написать тесты</h3>
-
+<h3 id="написать-тесты">Написать тесты</h3>
 <p>Первое, что вынуждает нас сделать фреймворк для тестов, — это вынести тестируемый код в отдельный модуль. Получим следующее:</p>
-
 <pre><code>var sum = require(&quot;./sum&quot;);
 
 let x = 100;
 let y = &quot;500&quot;;
 
-console.log(sum(x,y));
-</code></pre>
-
+console.log(sum(x,y));</code></pre>
 <p>и сам модуль</p>
-
 <pre><code>module.exports = function sum(x, y) {
     return x + y;
-}
-</code></pre>
-
+}</code></pre>
 <p>Напишем тесты. Так как нам необходимо только проверить, что функция будет работать с правильными параметрами и неправильными. Основное правило теста — проверить правильные, неправильные и граничные параметры как начало хорошего теста.</p>
-
 <pre><code>var assert = require(&quot;assert&quot;);
 var sum = require(&quot;../sum&quot;);
 
@@ -196,11 +133,8 @@ describe(&quot;sum&quot;, () =&gt; {
             sum(-1, &quot;5&quot;)
         });
     })
-})
-</code></pre>
-
+})</code></pre>
 <p>Запустим тест.</p>
-
 <pre><code>d:\projects\catchme&gt;mocha test
 
 
@@ -217,13 +151,9 @@ describe(&quot;sum&quot;, () =&gt; {
      AssertionError [ERR_ASSERTION]: Missing expected exception.
       at innerThrows (assert.js:646:7)
       at Function.throws (assert.js:662:3)
-      at Context.it (test\test.js:9:16)
-</code></pre>
-
+      at Context.it (test\test.js:9:16)</code></pre>
 <p>Видим, что тут уже отлавливается наша ошибка со строкой как параметром.</p>
-
-<h3>Прекондишены и посткондишены. Контрактное программирование.</h3>
-
+<h3 id="прекондишены-и-посткондишены.-контрактное-программирование.">Прекондишены и посткондишены. Контрактное программирование.</h3>
 <pre><code>const assert = require(&#39;assert&#39;);
 
 function sum(x, y) {
@@ -234,7 +164,7 @@ function contractedSum(x, y) {
     // Precondition
     assert(0 &lt; x &amp;&amp; x &lt; 101 &amp;&amp; typeof x === &quot;number&quot;, &quot;x is wrong!&quot;);
     assert(0 &lt; y &amp;&amp; y &lt; 501 &amp;&amp; typeof y === &quot;number&quot;, &quot;y is wrong!&quot;);
-
+    
     // Action
     let result = sum(x, y);
 
@@ -248,11 +178,8 @@ function contractedSum(x, y) {
 let x = 100;
 let y = parseInt(&quot;y500&quot;);
 
-console.log(contractedSum(x,y));
-</code></pre>
-
+console.log(contractedSum(x,y));</code></pre>
 <p>Компилируем</p>
-
 <pre><code>d:\projects\catchme&gt;node assertme.js 
 assert.js:41 
   throw new errors.AssertionError({ 
@@ -262,15 +189,10 @@ AssertionError [ERR_ASSERTION]: y is wrong!
     at Object.&lt;anonymous&gt; (d:\projects\catchme\assertme.js:25:13) 
     at Module._compile (module.js:624:30) 
     at Object.Module._extensions..js (module.js:635:10) 
-    at Module.load (module.js:545:32) 
-</code></pre>
-
+    at Module.load (module.js:545:32) </code></pre>
 <p>На мой взгляд, тесты получаются такими неудобными предкондишенами, потому что не существуют в самом коде и не дают будущим редакторам этого кода видеть те ограничения, которые мы на него установили.</p>
-
-<h3>Выводы</h3>
-
+<h3 id="выводы">Выводы</h3>
 <p>Единственный вывод, который я могу сделать, это вывод о необходимости использовать все эти техники правильно, выбирая те моменты, где они могут выстрелить и предупредить ошибку.</p>
-
 <p>К сожалению, ни один из них полностью не гарантирует, что будут найдены все ошибки, как и применение их без оглядки только увеличит работу без какого-либо выхлопа.</p>
 			</article>
 			<p>
