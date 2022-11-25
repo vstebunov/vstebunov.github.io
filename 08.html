@@ -17,12 +17,12 @@
 				<time datetime=22-08-2017>22 августа 2017</time>
 				<h1 id="fragment-shader">Fragment shader</h1>
 <p>В этой заметке я постараюсь рассказать как в Processing работать с трехмерными объектами и шейдерами. Для начала инициализируем и рисуем сцену:</p>
-<pre><code>float angle;
-PShape car;
-void setup() {
-    size(400, 400, P3D);
-    noStroke();
-}</code></pre>
+<pre><code>    float angle;
+    PShape car;
+    void setup() {
+        size(400, 400, P3D);
+        noStroke();
+    }</code></pre>
 <p>Скачиваем модель <a href="https://www.turbosquid.com/3d-models/3d-dodge-challenger-rt-shaker/1091890">машины</a>. Нам необходимы obj и mtl файлы для отображения машины. В файле mtl есть ссылка на текстуру. Именно этот файл содержал абсолютную ссылку на текстуру, так что пришлось поправить его на относительную. Ставим на сцену машину.</p>
 <pre><code>    car = loadShape(&quot;car.obj&quot;);</code></pre>
 <p>К сожалению главная точка модели стоит не там где нам надо, так что подготавливаем модель. Разворачиваем как надо. Ставим камеру под нужным углом.</p>
@@ -33,7 +33,7 @@ void setup() {
   pointLight(255, 255, 255, width / 2, height / 2, 100);    </code></pre>
 <p>Сделаем чтобы нарисованная 3D сцена выводилась на поверхность. Эта поверхность и будет обрабатываться шейдером, так как мы хотим постпроцессинг делать всей сцены, а не только текстуры. Шейдеры обрабатывают лишь текстуры.</p>
 <p>Выводим результирующую фигуру и даём ей текстуру с результатом.</p>
-<pre class="processing"><code>beginShape();
+<pre><code>beginShape();
 texture(img);
 vertex(-100, -100, 0);
 vertex( 100, -100, 0);
@@ -41,7 +41,7 @@ vertex( 100,  100, 0);
 vertex(-100,  100, 0);
 endShape(CLOSE);</code></pre>
 <p>Теперь инициализируем шейдер.</p>
-<pre class="processing"><code>Shader toon;
+<pre><code>Shader toon;
 
 void setup() {
     ...
@@ -50,51 +50,51 @@ void setup() {
 <p>Сам шейдер работает только с одним текселем на поверхности. Благодаря этому достигается распаралелливание обработки изображений. Для того чтобы получить правильно работающий алгоритм мы должны расписать как вычислить каждую конкретную точку. Это не всегда просто. Точка ответа тоже является переменной в которую можно только записать получившийся тексель, называется она gl_FragColor.</p>
 <p>Будем использовать алгоритм порядкового дитеринга и перевод всё в цвета ZX Spectrum. В openGL цвета представлены числами с плавающей точкой от нуля до единицы.</p>
 <p>Для получения текселя используется функция texture2D. Переменная varying говорит о том что данные к нам приходят из вершинного шейдера. vertTexCoord передаёт позицию данного текселя.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode glsl"><code class="sourceCode glsl"><a class="sourceLine" id="cb7-1" title="1"><span class="kw">uniform</span> <span class="dt">sampler2D</span> <span class="bu">texture</span>;</a>
-<a class="sourceLine" id="cb7-2" title="2"></a>
-<a class="sourceLine" id="cb7-3" title="3"><span class="dt">varying</span> <span class="dt">vec4</span> vertTexCoord;</a>
-<a class="sourceLine" id="cb7-4" title="4"></a>
-<a class="sourceLine" id="cb7-5" title="5"><span class="dt">const</span> <span class="dt">int</span> indexMatrix8x8[<span class="dv">64</span>] = <span class="dt">int</span>[](<span class="dv">0</span>,  <span class="dv">32</span>, <span class="dv">8</span>,  <span class="dv">40</span>, <span class="dv">2</span>,  <span class="dv">34</span>, <span class="dv">10</span>, <span class="dv">42</span>,</a>
-<a class="sourceLine" id="cb7-6" title="6">                                     <span class="dv">48</span>, <span class="dv">16</span>, <span class="dv">56</span>, <span class="dv">24</span>, <span class="dv">50</span>, <span class="dv">18</span>, <span class="dv">58</span>, <span class="dv">26</span>,</a>
-<a class="sourceLine" id="cb7-7" title="7">                                     <span class="dv">12</span>, <span class="dv">44</span>, <span class="dv">4</span>,  <span class="dv">36</span>, <span class="dv">14</span>, <span class="dv">46</span>, <span class="dv">6</span>,  <span class="dv">38</span>,</a>
-<a class="sourceLine" id="cb7-8" title="8">                                     <span class="dv">60</span>, <span class="dv">28</span>, <span class="dv">52</span>, <span class="dv">20</span>, <span class="dv">62</span>, <span class="dv">30</span>, <span class="dv">54</span>, <span class="dv">22</span>,</a>
-<a class="sourceLine" id="cb7-9" title="9">                                     <span class="dv">3</span>,  <span class="dv">35</span>, <span class="dv">11</span>, <span class="dv">43</span>, <span class="dv">1</span>,  <span class="dv">33</span>, <span class="dv">9</span>,  <span class="dv">41</span>,</a>
-<a class="sourceLine" id="cb7-10" title="10">                                     <span class="dv">51</span>, <span class="dv">19</span>, <span class="dv">59</span>, <span class="dv">27</span>, <span class="dv">49</span>, <span class="dv">17</span>, <span class="dv">57</span>, <span class="dv">25</span>,</a>
-<a class="sourceLine" id="cb7-11" title="11">                                     <span class="dv">15</span>, <span class="dv">47</span>, <span class="dv">7</span>,  <span class="dv">39</span>, <span class="dv">13</span>, <span class="dv">45</span>, <span class="dv">5</span>,  <span class="dv">37</span>,</a>
-<a class="sourceLine" id="cb7-12" title="12">                                     <span class="dv">63</span>, <span class="dv">31</span>, <span class="dv">55</span>, <span class="dv">23</span>, <span class="dv">61</span>, <span class="dv">29</span>, <span class="dv">53</span>, <span class="dv">21</span>);</a>
-<a class="sourceLine" id="cb7-13" title="13"></a>
-<a class="sourceLine" id="cb7-14" title="14"><span class="dt">float</span> <span class="fu">indexValue</span>() {</a>
-<a class="sourceLine" id="cb7-15" title="15">    <span class="dt">int</span> x = <span class="dt">int</span>(<span class="bu">mod</span>(<span class="bu">gl_FragCoord</span>.<span class="fu">x</span>, <span class="dv">8</span>));</a>
-<a class="sourceLine" id="cb7-16" title="16">    <span class="dt">int</span> y = <span class="dt">int</span>(<span class="bu">mod</span>(<span class="bu">gl_FragCoord</span>.<span class="fu">y</span>, <span class="dv">8</span>));</a>
-<a class="sourceLine" id="cb7-17" title="17">    <span class="kw">return</span> indexMatrix8x8[(x + y * <span class="dv">8</span>)] / <span class="fl">64.0</span>;</a>
-<a class="sourceLine" id="cb7-18" title="18">}</a>
-<a class="sourceLine" id="cb7-19" title="19"></a>
-<a class="sourceLine" id="cb7-20" title="20"><span class="dt">vec3</span> <span class="fu">dither</span>(<span class="dt">vec4</span> color) {</a>
-<a class="sourceLine" id="cb7-21" title="21">    <span class="dt">float</span> d = <span class="fu">indexValue</span>();</a>
-<a class="sourceLine" id="cb7-22" title="22">    <span class="dt">float</span> r = color.<span class="fu">r</span> + d;</a>
-<a class="sourceLine" id="cb7-23" title="23">    <span class="dt">float</span> g = color.<span class="fu">g</span> + d;</a>
-<a class="sourceLine" id="cb7-24" title="24">    <span class="dt">float</span> b = color.<span class="fu">b</span> + d;</a>
-<a class="sourceLine" id="cb7-25" title="25"></a>
-<a class="sourceLine" id="cb7-26" title="26">    <span class="dt">float</span> m = <span class="bu">max</span>(r,g);</a>
-<a class="sourceLine" id="cb7-27" title="27">    m = <span class="bu">max</span> (m,b);</a>
-<a class="sourceLine" id="cb7-28" title="28"></a>
-<a class="sourceLine" id="cb7-29" title="29">    <span class="kw">if</span> (m &lt; <span class="fl">0.49</span>) {</a>
-<a class="sourceLine" id="cb7-30" title="30">        r = <span class="fl">0.0</span>;</a>
-<a class="sourceLine" id="cb7-31" title="31">        g = <span class="fl">0.0</span>;</a>
-<a class="sourceLine" id="cb7-32" title="32">        b = <span class="fl">0.0</span>;</a>
-<a class="sourceLine" id="cb7-33" title="33">    } <span class="kw">else</span> {</a>
-<a class="sourceLine" id="cb7-34" title="34">        r = r &gt;= <span class="fl">0.49</span> ? <span class="fl">0.49</span> : <span class="fl">0.0</span>;</a>
-<a class="sourceLine" id="cb7-35" title="35">        g = g &gt;= <span class="fl">0.49</span> ? <span class="fl">0.49</span> : <span class="fl">0.0</span>;</a>
-<a class="sourceLine" id="cb7-36" title="36">        b = b &gt;= <span class="fl">0.49</span> ? <span class="fl">0.49</span> : <span class="fl">0.0</span>;</a>
-<a class="sourceLine" id="cb7-37" title="37">    }</a>
-<a class="sourceLine" id="cb7-38" title="38"></a>
-<a class="sourceLine" id="cb7-39" title="39">    <span class="kw">return</span> <span class="dt">vec3</span>(r,g,b);</a>
-<a class="sourceLine" id="cb7-40" title="40">}</a>
-<a class="sourceLine" id="cb7-41" title="41"></a>
-<a class="sourceLine" id="cb7-42" title="42"><span class="dt">void</span> <span class="fu">main</span>() {</a>
-<a class="sourceLine" id="cb7-43" title="43">  <span class="dt">vec4</span> col = <span class="fu">texture2D</span>(<span class="bu">texture</span>, vertTexCoord.<span class="fu">st</span>);</a>
-<a class="sourceLine" id="cb7-44" title="44">  <span class="va">gl_FragColor</span> = <span class="dt">vec4</span>(<span class="fu">dither</span>(col),<span class="dv">1</span>);</a>
-<a class="sourceLine" id="cb7-45" title="45">}</a></code></pre></div>
+<pre><code>uniform sampler2D texture;
+
+varying vec4 vertTexCoord;
+
+const int indexMatrix8x8[64] = int[](0,  32, 8,  40, 2,  34, 10, 42,
+                                     48, 16, 56, 24, 50, 18, 58, 26,
+                                     12, 44, 4,  36, 14, 46, 6,  38,
+                                     60, 28, 52, 20, 62, 30, 54, 22,
+                                     3,  35, 11, 43, 1,  33, 9,  41,
+                                     51, 19, 59, 27, 49, 17, 57, 25,
+                                     15, 47, 7,  39, 13, 45, 5,  37,
+                                     63, 31, 55, 23, 61, 29, 53, 21);
+
+float indexValue() {
+    int x = int(mod(gl_FragCoord.x, 8));
+    int y = int(mod(gl_FragCoord.y, 8));
+    return indexMatrix8x8[(x + y * 8)] / 64.0;
+}
+
+vec3 dither(vec4 color) {
+    float d = indexValue();
+    float r = color.r + d;
+    float g = color.g + d;
+    float b = color.b + d;
+
+    float m = max(r,g);
+    m = max (m,b);
+
+    if (m &lt; 0.49) {
+        r = 0.0;
+        g = 0.0;
+        b = 0.0;
+    } else {
+        r = r &gt;= 0.49 ? 0.49 : 0.0;
+        g = g &gt;= 0.49 ? 0.49 : 0.0;
+        b = b &gt;= 0.49 ? 0.49 : 0.0;
+    }
+
+    return vec3(r,g,b);
+}
+
+void main() {
+  vec4 col = texture2D(texture, vertTexCoord.st);
+  gl_FragColor = vec4(dither(col),1);
+}</code></pre>
 <p>Вот результат.</p>
 <figure>
 <img src="img/simple_shader.png" alt="image" /><figcaption>image</figcaption>
