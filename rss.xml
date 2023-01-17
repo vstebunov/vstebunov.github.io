@@ -151,6 +151,13 @@
             <pubDate>Mon, 01 Aug 2022 00:00:00 MSK</pubDate>
             <description>Дизерниг Аткинсона работает так же как ...</description>
         </item>
+        <item>
+            <title>Компилятор markdown</title>
+            <link>http://vstebunov.me/22.html</link>
+            <guid>http://vstebunov.me/22.html</guid>
+            <pubDate>Tue, 17 Jan 2023 00:00:00 MSK</pubDate>
+            <description>Пока не нашёл работы поконтрибутил в open source. Сделал quick fix для сервера делающего папку с файлами md полноценным локальным сайтом. Называется он ...</description>
+        </item>
     </channel>
 </rss>
 
