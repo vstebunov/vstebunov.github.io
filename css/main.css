@@ -13,6 +13,7 @@ body {
 footer {
   font-size: 12px;
   padding-top: 10px;
+  border-bottom: 1px solid #aabd87;
 }
 
 h1,
