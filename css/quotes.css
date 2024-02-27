@@ -1,12 +1,7 @@
-@font-face {
-  font-family: 'Literata';
-  src: url('https://github.com/vstebunov/vstebunov.github.io/raw/master/webfonts/Literata-Regular.woff2') format('woff2');
-}
-
 body {
   background-color: white;
   color: #464237;
-  font-family: "Literata", "Book Antiqua", "Times New Roman", Times, serif;
+  font-family: "Book Antiqua", "Times New Roman", Times, serif;
   line-height: 1.6;
   margin: 0 auto;
   width: 100%;
