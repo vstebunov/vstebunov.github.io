@@ -1,21 +1,27 @@
 <!DOCTYPE HTML>
 <html>
-	<head>
-		<meta charset="utf-8"></meta>
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<title>Блог Стебунова Владимира</title>
-		<link rel="stylesheet" type="text/css" href="main.css">	
-        <meta property="og:title" content="Как я пишу блог" />
-		
-	</head>
-	<body>
-		<header>
-            <h1><a href="/">Блог Стебунова Владимира</a></h1>
-		</header>
-		<main>
-			<article>
-				<time datetime=19-04-2017>19 апреля 2017</time>
-				<h1 id="как-я-пишу-блог">Как я пишу блог?</h1>
+
+<head>
+	<meta charset="utf-8">
+	</meta>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Блог Стебунова Владимира</title>
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link
+		href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,200..900;1,7..72,200..900&display=swap"
+		rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="css/main.css">
+		<meta property="og:title" content="Как я пишу блог" />	</head>
+
+<body>
+	<header>
+		<h1><a href="/">Блог Стебунова Владимира</a></h1>
+	</header>
+	<main>
+		<article>
+			<time datetime=19-04-2017>19 апреля 2017</time>
+			<h1 id="как-я-пишу-блог">Как я пишу блог?</h1>
 <p>Я решил, что блог у меня будет статичными страницами, поэтому всe рендерится на сервере один раз. Так как не хочется заморачиваться с html, я пишу саму статью с помощью разметки <a href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet">markdown</a> в своём любимом редакторе vim. Для того чтобы посмотреть, как будет выглядеть разметка использую <a href="https://github.com/Thiht/markdown-viewer">addon для firefox</a>.<br />
 Загружаю полученное на сервер через ftp. Затем компилирую markdown с помощью <a href="http://jgm.github.io/lunamark/lunamark.1.html">lunamark</a> и <a href="http://cosmo.luaforge.net/">cosmo</a> и заранее написанного шаблона в html странички. Команда компиляции markdown в html.</p>
 <pre><code> lunamark -Xlua_metadata -t html -o entry.html -T template1.html entry.md</code></pre>
@@ -37,18 +43,17 @@
 <p>Сделал скрипт который пробегается по всем черновикам и делает из них html. Находиться в той же папке где make_idx.</p>
 <p><strong>202206222347 Сделал тимплейт для листа в html</strong></p>
 <p>Теперь генерирую всё pandoc. Мелкие баги lua-markdown и небольшая заброшенность заставила перейти на него.</p>
-<pre><code>pandoc list.md -o list.html --template ~/blog/templates/template3_pandoc.html --metadata title=&quot;test&quot;</code></pre>
-			</article>
-			<p>
-                <a href="05.html">Следующая статья</a>
-			</p>
-			<p>
-                <a href="03.html">Предыдущая статья</a>
-			</p>
-		</main>
-		<hr/>
-		<footer>
-			<p>Любая перепечатка материалов возможна только с разрешения владельца сайта</p>
-		</footer>
-	</body>
+<pre><code>pandoc list.md -o list.html --template ~/blog/templates/template3_pandoc.html --metadata title=&quot;test&quot;</code></pre>		</article>
+		<p>
+			<a href="05.html">Следующая статья</a>
+		</p>
+		<p>
+			<a href="03.html">Предыдущая статья</a>
+		</p>
+	</main>
+	<footer>
+		<p>Любая перепечатка материалов возможна только с разрешения владельца сайта</p>
+	</footer>
+</body>
+
 </html>

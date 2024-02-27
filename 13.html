@@ -1,21 +1,27 @@
 <!DOCTYPE HTML>
 <html>
-	<head>
-		<meta charset="utf-8"></meta>
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<title>Блог Стебунова Владимира</title>
-		<link rel="stylesheet" type="text/css" href="main.css">	
-        <meta property="og:title" content="TCL" />
-		
-	</head>
-	<body>
-		<header>
-            <h1><a href="/" class="h-card">Блог Стебунова Владимира</a></h1>
-		</header>
-		<main>
-			<article>
-				<time datetime=03-08-2018>3 августа 2018</time>
-				<h1 id="tcl">TCL</h1>
+
+<head>
+	<meta charset="utf-8">
+	</meta>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Блог Стебунова Владимира</title>
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link
+		href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,200..900;1,7..72,200..900&display=swap"
+		rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="css/main.css">
+		<meta property="og:title" content="TCL" />	</head>
+
+<body>
+	<header>
+		<h1><a href="/">Блог Стебунова Владимира</a></h1>
+	</header>
+	<main>
+		<article>
+			<time datetime=03-08-2018>3 августа 2018</time>
+			<h1 id="tcl">TCL</h1>
 <p>С TCL (Tool Command Language) я первый раз познакомился в университете. Там на нём мы писали конфиги для моделирования работы сети. Тогда он меня не впечатлил. Но недавно прочитал <a href="http://antirez.com/articoli/tclmisunderstood.html">эту статью</a> и немножко прифигел.</p>
 <p>Я где-то со знакомства с бейсиком хотел, чтобы функции могли себя перезаписывать или меняться в зависимости от каких-то внешних факторов. Тогда я еще не знал про метапрограммирование. Так вот в TCL это возможно из коробки и не является какой-то эзотерической фичей.</p>
 <p>В этом языке всё хранится в строках. Любая переменная — это строка, любая функция — это строка. Сам код программы — это строка. Сложные структуры типа словаря, списка или массива — это строки со специальным синтаксисом. Благодаря этому можно любую переменную без всякой сериализации послать по сети, сохранить в файл или передать по каналам, при этом при получении в программе никаких действий делать не придется, она уже готова к использованию. Ну и второй момент: т.к. функция является строкой, её можно переписать прямо во время выполнения; также большая часть метаинформации будет доступна из этой функции благодаря развитым средствам рефлексии.</p>
@@ -31,18 +37,17 @@
 <ul>
 <li><a href="http://antirez.com/articoli/tclmisunderstood.html">Статья</a></li>
 <li><a href="https://github.com/vstebunov/HALUtility">Программа</a></li>
-</ul>
-			</article>
-			<p>
-                <a href="14.html">Следующая статья</a>
-			</p>
-			<p>
-                <a href="12.html">Предыдущая статья</a>
-			</p>
-		</main>
-		<hr/>
-		<footer>
-			<p>Любая перепечатка материалов возможна только с разрешения владельца сайта</p>
-		</footer>
-	</body>
+</ul>		</article>
+		<p>
+			<a href="14.html">Следующая статья</a>
+		</p>
+		<p>
+			<a href="12.html">Предыдущая статья</a>
+		</p>
+	</main>
+	<footer>
+		<p>Любая перепечатка материалов возможна только с разрешения владельца сайта</p>
+	</footer>
+</body>
+
 </html>
