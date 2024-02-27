@@ -13,7 +13,7 @@ body {
 footer {
   font-size: 12px;
   padding-top: 10px;
-  border-bottom: 1px solid #aabd87;
+  border-top: 1px solid #aabd87;
 }
 
 h1,
@@ -41,9 +41,18 @@ header>h1 {
   text-align: right;
 }
 
+figure {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+figcaption {
+  display: flex;
+}
+
 img {
-  display: block;
-  margin: 0 auto;
+  display: flex;
 }
 
 code {
