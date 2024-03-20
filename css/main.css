@@ -53,6 +53,7 @@ figcaption {
 
 img {
   display: flex;
+  width: 100%;
 }
 
 code {
