@@ -257,6 +257,16 @@ graphviz</title>
             <description>Оформил в виде отдельного Electron приложения несколько видов
 Dithering, что описывал в этом блоге....</description>
         </item>
+        <item>
+            <title>Docker-приложения</title>
+            <link>http://vstebunov.me/25.html</link>
+            <guid>http://vstebunov.me/25.html</guid>
+            <pubDate>Thu, 08 May 2025 00:00:00 +04</pubDate>
+            <description>Сейчас перешёл на приложения, которые работают в Docker и обращаются
+к внешней файловой системе для хранения данных. Перечислю те из них,
+которые считаю полезными и часто использую, хотя многие о них даже не
+слышали....</description>
+        </item>
     </channel>
 </rss>
 
