@@ -32,5 +32,5 @@ window.onload = function () {
         cursory = cursory + step;
     }
 
-    document.getElementById('body').style = "background-image:url(" + canvas.toDataURL("image/png") + ")";
+    // document.getElementById('body').style = "background-image:url(" + canvas.toDataURL("image/png") + ")";
 }
