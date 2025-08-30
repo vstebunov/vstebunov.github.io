@@ -1,0 +1,86 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	</meta>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Блог Стебунова Владимира</title>
+	<link rel="stylesheet" type="text/css" href="css/main.css">
+		<meta property="og:title" content="Сапер со случайностью" />	</head>
+
+<body>
+	<header>
+		<h1><a href="/">Блог Стебунова Владимира</a></h1>
+	</header>
+	<main>
+		<article>
+			<time datetime=30-08-2025>30 августа 2025</time>
+			<h1 id="сапер-со-случайностью">Сапер со случайностью</h1>
+<p>В рамках изучения работы случайности написал небольщую игру Сапёр,
+где на поле выводится вероятность того что под квадратом мина. Чтобы
+было интересно играть убрал проигрыш по наступлению на мину. Сделал что
+красные это подорванные мины и хаки не подорванные. Для большего добавил
+две вероятности, выводится та что больше:</p>
+<ul>
+<li>Первая вероятность это количество мин на количество закрытых
+клеток.</li>
+<li>Вторая вероятность это количество открытых полей рядом с единичкой,
+на всё количество полей.</li>
+</ul>
+<p>Из-за второй вероятности словил баг, что пустая клетка окруженная
+единичками может восприниматься как мина, хотя ею не является. Как это
+решить пока не придумал, да и надо ли. Вот сама игра. Поле 9 на 9 где
+случайным образом спрятно 10 мин.</p>
+<figure>
+<svg id="main" viewport="0 0 450 450" width="450px" height="450px" style="background-color: green;border: 1px solid black;">
+</svg>
+</figure>
+<script type="text/javascript" src="js/mine.js"></script>
+<style>
+    @keyframes fade {
+        from { opacity: 1; }
+        to { opacity: 0; visibility: hidden; }
+    } 
+
+    @keyframes kaboom {
+        0% {
+            stroke: black;
+        }
+        50% {
+            fill: white;
+        }
+        100% {
+            fill: red;
+        }
+    }
+    .mine-rect {
+        fill: #1d2b06;
+        stroke: white;
+    }
+    .hidden {
+        animation: fade 0.5s ease forwards;
+    }
+    .bombed {
+        animation: kaboom 1s ease forwards;
+        text {
+        }
+    }
+    .finded {
+        fill: #c3b091;
+    }
+</style>		</article>
+		<p>
+			
+		</p>
+		<p>
+			<a href="26.html">Предыдущая статья</a>
+		</p>
+	</main>
+	<footer>
+		<p>Любая перепечатка материалов возможна только с разрешения владельца сайта</p>
+        <p><a href="https://buymeacoffee.com/vstebunov">Купить кофе автору</a></p>
+	</footer>
+</body>
+
+</html>
